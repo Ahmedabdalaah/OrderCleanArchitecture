@@ -15,6 +15,11 @@ namespace OrderCleanArchitecture.Core.Mapping
             AddCategoryCommands();
             EditCategoryCommand();
             DeleteCategoryCommand();
+            GetAllOrderMapping();
+            GetOrderByIdMapping();
+            AddOrderCommand();
+            EditOrderCommand();
+            DeleteOrderCommand();
         }
     }
 }

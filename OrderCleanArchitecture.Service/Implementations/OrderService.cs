@@ -14,7 +14,7 @@ namespace OrderCleanArchitecture.Service.Implementations
         }
         public async Task<string> AddOrderAsunc(Order order)
         {
-            await _repo.GetAllOrderAsync();
+            await _repo.AddAsync(order);
             return "Success";
         }
 
@@ -34,6 +34,8 @@ namespace OrderCleanArchitecture.Service.Implementations
             return await _repo.GetTableAsTracking().Include(x => x.Employee)
                                .Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
         }
+
+
         public async Task<string> RemoveOrderAsync(Order order)
         {
             await _repo.DeleteAsync(order);
