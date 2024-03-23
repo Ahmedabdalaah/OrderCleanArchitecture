@@ -1,0 +1,43 @@
+﻿
+@model List<EmployeeViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>  الموظفين </h3>
+<div class="text-end">
+    <a asp-controller=" " asp-action=" " class="btn btn-success">
+        <i class="bi bi-file-plus"></i>
+        &nbsp; إضافة موظف جديد
+    </a>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active">
+            <th>كود الموظف</th>
+            <th>اسم الموظف</th>
+            <th>ايميل الموظف</th>
+            <th>رقم الهاتف</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr class="table-active">
+                <td>@employee.Id</td>
+                <td>@employee.Name</td>
+                <td>@employee.Email</td>
+                <td>@employee.Phone</td>
+                <td>
+                    <a asp-controller="" asp-action="" asp-route-id="" class=" btn-success">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </td>
+                <td>
+                    <a asp-controller="" asp-action="" asp-route-id="" class=" btn-danger">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
