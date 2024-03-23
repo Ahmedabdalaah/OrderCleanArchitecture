@@ -13,6 +13,8 @@ namespace OrderCleanArchitecture.Core.Mapping
             GetAllCategoryMapping();
             GetCategoryByIdMapping();
             AddCategoryCommands();
+            EditCategoryCommand();
+            DeleteCategoryCommand();
         }
     }
 }

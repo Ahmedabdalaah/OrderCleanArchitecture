@@ -54,7 +54,7 @@ namespace OrderCleanArchitecture.Service.Implementations
         {
             var employee = await _repo.GetTableAsTracking().Where(x => x.Name.Equals(name) & !x.Id.Equals(id)).FirstOrDefaultAsync();
             if (employee == null)
-            {
+        {
                 return false;
             }
             return true;

@@ -32,5 +32,17 @@ namespace OrderCleanArchitecture.Api.Controllers
             var response = await _mediator.Send(commands);
             return Ok(response);
         }
+        [HttpPut("/Category/Update")]
+        public async Task<IActionResult> EditCategory([FromBody] EditCategoryCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return Ok(response);
+        }
+        [HttpDelete("Category/Delete/{id}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] int id)
+        {
+            await _mediator.Send(new DeleteCategoryCommand(id));
+            return Ok();
+        }
     }
 }

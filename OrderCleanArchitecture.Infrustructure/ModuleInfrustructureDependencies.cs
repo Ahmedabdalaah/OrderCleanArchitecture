@@ -11,6 +11,7 @@ namespace OrderCleanArchitecture.Infrustructure
         {
             services.AddTransient<IEmployeeRepository, EmployeeRepsitory>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             return services;
         }

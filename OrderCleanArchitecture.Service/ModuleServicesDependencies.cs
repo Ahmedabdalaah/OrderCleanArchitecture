@@ -10,7 +10,7 @@ namespace OrderCleanArchitecture.Service
         {
             services.AddTransient<IEmployeeService, EmployeeService>();
             services.AddTransient<ICategoryService, CategryService>();
-
+            services.AddTransient<IOrderService, OrderService>();
             return services;
         }
     }
