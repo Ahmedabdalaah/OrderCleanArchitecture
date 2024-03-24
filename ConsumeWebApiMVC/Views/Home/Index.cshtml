@@ -1,8 +1,113 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+                            &nbsp;
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="w3-content w3-display-container">
+    <img class="mySlides" src="/css/images/slide1.jpg" style="width:100%; height: 350px">
+    <img class="mySlides" src="/css/images/slide2.jpg" style="width:100%; height: 350px">
+    <img class="mySlides" src="/css/images/slide3.jpg" style="width:100% ; height: 350px">
+    <img class="mySlides" src="/css/images/Slide4.jpg" style="width:100% ; height: 350px">
+
+    <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+    <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
 </div>
+
+<script>
+    var slideIndex = 1;
+    showDivs(slideIndex);
+
+    function plusDivs(n) {
+        showDivs(slideIndex += n);
+    }
+
+    function showDivs(n) {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        if (n > x.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = x.length }
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        x[slideIndex - 1].style.display = "block";
+    }
+</script>
+&nbsp;
+&nbsp;
+&nbsp;
+<table align="center">
+    <thead class="grid-container">
+        <tr class="table-active">
+            <th>
+                <div class="grid-container">
+                    <div>
+                        <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                            <div class="card-header">الطلبات </div>
+                            <div class="card-body">
+                                <img src="~/css/images/orders.png" class="card-title" style="width: 150px ; height: 150px"></img>
+                                <p class="card-text">  بيانات الطلبات  </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>
+                <div class="grid-container">
+                    <div>
+                        <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                            <div class="card-header"> الموظفين </div>
+                            <div class="card-body">
+                                <img src="~/css/images/employee.png" class="card-title" style="width: 150px ; height: 150px"></img>
+                                <p class="card-text" >بيانات الموظفين  </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>
+                <div class="grid-container">
+                    <div>
+                        <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                            <div class="card-header">الاتصال بنا  </div>
+                            <div class="card-body">
+                                <img src="~/css/images/contact us.png" class="card-title" style="width: 150px ; height: 150px"></img>
+                                <p class="card-text"> وسائل متعددة للاتصال بنا </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+        </tr>
+    </thead>
