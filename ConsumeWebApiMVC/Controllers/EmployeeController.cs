@@ -94,9 +94,106 @@ namespace ConsumeWebApiMVC.Controllers
                     }
                 }
             }
-            ModelState.AddModelError(string.Empty, "Server error try after some time.");
             return View(employee);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> EditEmployee(int id)
+        {
+            EmployeeViewModel employee = null;
+            IEnumerable<CategoryViewModel> categories = null;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:7140/api/");
+                var responseTask = client.GetAsync("/Employee/" + id);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                // category
+                var responseTaskk = client.GetAsync("/Category/List");
+                responseTaskk.Wait();
+
+                var resultt = responseTaskk.Result;
+
+                //If success received   
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<EmployeeViewModel>();
+                    readTask.Wait();
+
+                    employee = readTask.Result;
+                    /// category
+                    /// 
+                    var readTask2 = resultt.Content.ReadAsAsync<IList<CategoryViewModel>>();
+                    readTask2.Wait();
+                    categories = readTask2.Result;
+                    SelectList catItem = new SelectList(categories, "Id", "Name", employee.CategoryId);
+                    ViewBag.catItem = catItem;
+                }
+                else
+                {
+                    //Error response received   
+                    ModelState.AddModelError(string.Empty, "Server error try after some time.");
+                }
+            }
+            return View(employee);
+        }
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditEmployee(EmployeeViewModel employee)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("https://localhost:7140/api/");
+                    HttpResponseMessage response = await client.PutAsJsonAsync("/Employee/Update", employee);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("GetAllEmployee");
+                    }
+                }
+            }
+            return View(employee);
+        }
+        [HttpGet]
+        public async Task<ActionResult> DeleteEmployee(int id)
+        {
+            EmployeeViewModel employee = null;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:7140/api/");
+                var responseTask = client.GetAsync("/Employee/" + id);
+                responseTask.Wait();
+                var result = responseTask.Result;
+
+
+                //If success received   
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<EmployeeViewModel>();
+                    readTask.Wait();
+
+                    employee = readTask.Result;
+                }
+                else
+                {
+                    //Error response received   
+                    ModelState.AddModelError(string.Empty, "Server error try after some time.");
+                }
+            }
+            return View(employee);
+        }
+        public async Task<IActionResult> DeleteEmployee(EmployeeViewModel employee)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:7140/api/");
+                HttpResponseMessage response = await client.DeleteAsync("/Employee/Delete/" + employee.Id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("GetAllEmployee");
+                }
+            }
+            return View();
+        }
     }
 }

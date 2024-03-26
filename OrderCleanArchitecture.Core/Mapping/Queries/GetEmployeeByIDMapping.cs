@@ -8,8 +8,8 @@ namespace OrderCleanArchitecture.Core.Mapping
         public void GetEmployeeByIDMapping()
         {
             CreateMap<Employee, GetEmployeeIDDto>()
-                .ForMember(dest => dest.CategoryName, option => option
-                .MapFrom(src => src.Category.Name));
+                .ForMember(dest => dest.CategoryId, option => option
+                .MapFrom(src => src.CategoryId));
         }
     }
 }

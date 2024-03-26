@@ -1,0 +1,57 @@
+﻿@model ConsumeWebApiMVC.Models.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "DeleteEmployee";
+}
+
+<h1 class="text-end"> حذف بيانات موظف </h1>
+
+<h3>هل أنت متأكد انك تريد حذف تلك البيانات </h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoryId)
+        </dd>
+    </dl>
+    
+    <form asp-action="DeleteEmployee">
+        <input type="submit" value="حذف" class="btn btn-danger" /> 
+        <hr/>
+        <hr/>
+        <a asp-action="GetAllEmployee">الرجوع للقائمة الرئيسية</a>
+    </form>
+</div>

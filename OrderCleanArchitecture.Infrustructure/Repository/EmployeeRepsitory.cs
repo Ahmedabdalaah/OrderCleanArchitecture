@@ -21,7 +21,7 @@ namespace OrderCleanArchitecture.Infrustructure.Repository
         #region Handle functions
         public async Task<List<Employee>> GetEmployeeAsync()
         {
-            return await _employeeSet.Include(x => x.Category).ToListAsync();
+            return await _employeeSet.ToListAsync();
         }
         #endregion
     }
