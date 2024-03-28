@@ -165,7 +165,7 @@ namespace ConsumeWebApiMVC.Controllers
                 responseTask.Wait();
                 var result = responseTask.Result;
 
-
+                //////////////////////////////////////
                 //If success received   
                 if (result.IsSuccessStatusCode)
                 {
