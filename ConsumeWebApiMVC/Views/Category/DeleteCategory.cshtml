@@ -1,0 +1,42 @@
+﻿@model ConsumeWebApiMVC.Models.CategoryViewModel
+
+@{
+    ViewData["Title"] = "DeleteCategory";
+}
+
+<h1>حذف بيانات قسم </h1>
+<hr/>
+<h3>هل أنت متأكد أنك تريد حذف تلك البيانات</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-lg-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <hr/>
+        <dd class = "col-lg-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <hr />
+        <dt class = "col-lg-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <hr />
+        <dd class = "col-lg-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="DeleteCategory">
+        <hr />
+        <a asp-controller="Category" asp-action="GetAllCategories" class="btn btn-warning">
+            رجوع
+        </a>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <input type="submit" value="حذف" class="btn btn-danger" /> 
+        <hr/>
+        <hr/>
+        <a asp-action="GetAllCategories">الرجوع ببقائمة الرئيسية </a>
+    </form>
+</div>

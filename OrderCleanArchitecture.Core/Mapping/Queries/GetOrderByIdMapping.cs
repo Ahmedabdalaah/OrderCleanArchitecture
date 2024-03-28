@@ -8,7 +8,7 @@ namespace OrderCleanArchitecture.Core.Mapping
         public void GetOrderByIdMapping()
         {
             CreateMap<Order, GetOrderByIdDTO>()
-                .ForMember(dest => dest.Describtion,
+                .ForMember(dest => dest.Description,
                 option => option.MapFrom(src => src.Description))
                 .ForMember(dest => dest.EmployeeName,
                 option => option.MapFrom(src => src.Employee.Name));

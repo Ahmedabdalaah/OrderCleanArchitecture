@@ -1,0 +1,38 @@
+﻿@model ConsumeWebApiMVC.Models.CategoryViewModel
+
+@{
+    ViewData["Title"] = "EditCategory";
+}
+<hr/>
+<h1>تعديل بيانات قسم </h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditCategory">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label "></label>
+                <input asp-for="Id" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <hr/>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <hr />
+                <a asp-controller="Category" asp-action="GetAllCategories" class="btn btn-danger">
+                    رجوع
+                </a>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <input type="submit" value="خفظ" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

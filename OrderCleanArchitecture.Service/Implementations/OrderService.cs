@@ -26,7 +26,7 @@ namespace OrderCleanArchitecture.Service.Implementations
 
         public Task<List<Order>> GetOrderAsync()
         {
-            return _repo.GetAll();
+            return _repo.GetAllOrderAsync();
         }
 
         public async Task<Order> GetOrderByIdAsync(int id)

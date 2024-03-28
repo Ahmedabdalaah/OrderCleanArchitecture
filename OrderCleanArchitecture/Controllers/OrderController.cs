@@ -14,7 +14,7 @@ namespace OrderCleanArchitecture.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpGet]
+        [HttpGet("/Order/List")]
         public async Task<IActionResult> GetAllOrder()
         {
             var response = await _mediator.Send(new GetAllOrdersQuery());

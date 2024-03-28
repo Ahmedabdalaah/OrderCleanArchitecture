@@ -1,0 +1,58 @@
+﻿@model ConsumeWebApiMVC.Models.OrderViewModel
+
+@{
+    ViewData["Title"] = "EditOrder";
+}
+
+<h1>EditOrder</h1>
+
+<h4>OrderViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditOrder">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <hr/>
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" disabled />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <hr/>
+                <label asp-for="Name" class="control-label"></label>
+                <hr/>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <hr/>
+                <label asp-for="Description" class="control-label"></label>
+                <hr/>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <hr />
+                <label asp-for="EmployeeId" class="control-label" style=" font-size:large"></label>
+                <hr />
+                <select class="form-select-sm" asp-for="EmployeeId" style="width:400px" asp-items="ViewBag.catItem"></select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                <hr/>
+            </div>
+            <div class="form-group">
+                <hr />
+                <a asp-controller="Order" asp-action="GetAllOrders" class="btn btn-danger">
+                    رجوع
+                </a>
+                &nbsp; &nbsp; &nbsp;
+                <input type="submit" value="تعديل" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

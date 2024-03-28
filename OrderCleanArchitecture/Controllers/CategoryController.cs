@@ -5,7 +5,7 @@ using OrderCleanArchitecture.Core.Features.Category.Queries.Models;
 
 namespace OrderCleanArchitecture.Api.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {

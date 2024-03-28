@@ -164,8 +164,6 @@ namespace ConsumeWebApiMVC.Controllers
                 var responseTask = client.GetAsync("/Employee/" + id);
                 responseTask.Wait();
                 var result = responseTask.Result;
-
-                //////////////////////////////////////
                 //If success received   
                 if (result.IsSuccessStatusCode)
                 {
