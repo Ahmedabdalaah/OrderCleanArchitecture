@@ -10,7 +10,9 @@ namespace ConsumeWebApiMVC.Models
         public string Name { get; set; }
         [DisplayName("وصف الطلب")]
         public string Description { get; set; }
-        [DisplayName("  الموظف المسئول")]
+        [DisplayName(" كود الموظف المسئول")]
         public int EmployeeId { get; set; }
+        [DisplayName("  اسم الموظف المسئول")]
+        public string? EmployeeName { get; set; }
     }
 }

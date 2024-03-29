@@ -1,0 +1,46 @@
+﻿@model ConsumeWebApiMVC.Models.OrderViewModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+<hr/>
+<h1>عرض الطلبات  الخاصة بك</h1>
+<hr/>
+<div>
+    <h4>من فضلك أدخل الكود الخاص بك </h4>
+    <hr />
+    <form id="myForm" class="form-label mt-4" asp-action="Search" method="post">
+        Code: <input type="text" style="width:250px" class="form-control" name="code"><br />
+        <br />
+        <input type="button" class="btn-success"  onclick="formSubmit()" value="عرض الطلب">
+    </form>
+    <script type="text/javascript">
+        function formSubmit() {
+            document.getElementById("myForm").submit()
+        }
+    </script>
+    @{
+        var data = (ConsumeWebApiMVC.Models.OrderViewModel)ViewData["Message"];
+    }
+    @if (data != null)
+    {
+        <div class="grid-container" style="text-align:center">
+            <div>
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp;
+                <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+                    <div class="card-header"> كود الطلب  : @data.Id</div>
+                    <div class="card-body">
+                        <h4 class="card-title"> اسم الطلب  : @data.Name</h4>
+                        <p class="card-text"> وصف الطلب @data.Description</p>
+                        <p class="card-text"> كود الموظف @data.EmployeeId</p>
+                        <p class="card-text"> اسم الموظف @data.EmployeeName</p>
+                        <a asp-controller="Order" asp-action="DeleteOrder" asp-route-id="@data.Id" class=" btn-danger">
+                            <i class="bi  bi-trash3-fill"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }

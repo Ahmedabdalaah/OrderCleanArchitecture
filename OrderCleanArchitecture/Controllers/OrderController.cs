@@ -26,6 +26,12 @@ namespace OrderCleanArchitecture.Api.Controllers
             var response = await _mediator.Send(new GetOrderByIdQuery(id));
             return Ok(response);
         }
+        [HttpGet("/Order/Search/{id}")]
+        public async Task<IActionResult> GetOrderByEmpId([FromRoute] int id)
+        {
+            var response = await _mediator.Send(new GetOrderByEmpQuery(id));
+            return Ok(response);
+        }
         [HttpPost("/Order/Add")]
         public async Task<ActionResult> AddOrder([FromBody] AddOrderCommand command)
         {

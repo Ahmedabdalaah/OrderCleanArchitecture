@@ -41,5 +41,11 @@ namespace OrderCleanArchitecture.Service.Implementations
             await _repo.DeleteAsync(order);
             return "Success";
         }
+
+        public async Task<Order> SearchOrderAsunc(int id)
+        {
+            return await _repo.GetTableAsTracking().Include(x => x.Employee)
+                               .Where(x => x.EmployeeId.Equals(id)).FirstOrDefaultAsync();
+        }
     }
 }

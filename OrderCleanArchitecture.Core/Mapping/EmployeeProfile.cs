@@ -20,6 +20,7 @@ namespace OrderCleanArchitecture.Core.Mapping
             AddOrderCommand();
             EditOrderCommand();
             DeleteOrderCommand();
+            GetOrderByEmMapping();
         }
     }
 }
