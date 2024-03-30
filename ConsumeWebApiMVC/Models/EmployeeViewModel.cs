@@ -16,5 +16,7 @@ namespace ConsumeWebApiMVC.Models
         public string Address { get; set; }
         [DisplayName(" القسم التابع له")]
         public int CategoryId { get; set; }
+        [DisplayName(" اسم الموظف المسئول")]
+        public string? CategoryName { get; set; }
     }
 }

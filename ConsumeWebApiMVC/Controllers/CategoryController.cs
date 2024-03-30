@@ -5,27 +5,33 @@ namespace ConsumeWebApiMVC.Controllers
 {
     public class CategoryController : Controller
     {
+        private ILogger<CategoryController> _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public CategoryController(ILogger<CategoryController> logger, IHttpClientFactory httpClientFactory)
+        {
+            _logger = logger;
+            _httpClientFactory = httpClientFactory;
+        }
+
         public IActionResult GetAllCategories()
         {
             IEnumerable<CategoryViewModel> categories = null;
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTask = client.GetAsync("/Category/List");
+            responseTask.Wait();
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTask = client.GetAsync("/Category/List");
-                responseTask.Wait();
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<List<CategoryViewModel>>();
-                    readTask.Wait();
-                    categories = readTask.Result;
-                }
-                else
-                {
-                    //Error response received   
-                    categories = Enumerable.Empty<CategoryViewModel>();
-                    ModelState.AddModelError(string.Empty, "Server error try after some time.");
-                }
+                var readTask = result.Content.ReadAsAsync<List<CategoryViewModel>>();
+                readTask.Wait();
+                categories = readTask.Result;
+            }
+            else
+            {
+                //Error response received   
+                categories = Enumerable.Empty<CategoryViewModel>();
+                ModelState.AddModelError(string.Empty, "Server error try after some time.");
             }
             return View(categories);
         }
@@ -40,16 +46,13 @@ namespace ConsumeWebApiMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = new HttpClient())
+                var client = _httpClientFactory.CreateClient("OrderApi");
+                var responseTask = client.PostAsJsonAsync("/Category/Add", category);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
                 {
-                    client.BaseAddress = new Uri("https://localhost:7140/api/");
-                    var responseTask = client.PostAsJsonAsync("/Category/Add", category);
-                    responseTask.Wait();
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction("GetAllCategories");
-                    }
+                    return RedirectToAction("GetAllCategories");
                 }
             }
             return View(category);
@@ -58,18 +61,15 @@ namespace ConsumeWebApiMVC.Controllers
         public async Task<IActionResult> EditCategory(int id)
         {
             CategoryViewModel category = null;
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTask = client.GetAsync("/Category/Add" + id);
+            responseTask.Wait();
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTask = client.GetAsync("/Category/Add" + id);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<CategoryViewModel>();
-                    readTask.Wait();
-                    category = readTask.Result;
-                }
+                var readTask = result.Content.ReadAsAsync<CategoryViewModel>();
+                readTask.Wait();
+                category = readTask.Result;
             }
             return View(category);
         }
@@ -78,14 +78,11 @@ namespace ConsumeWebApiMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = new HttpClient())
+                var client = _httpClientFactory.CreateClient("OrderApi");
+                HttpResponseMessage response = await client.PutAsJsonAsync("/Category/Update", category);
+                if (response.IsSuccessStatusCode)
                 {
-                    client.BaseAddress = new Uri("https://localhost:7140/api/");
-                    HttpResponseMessage response = await client.PutAsJsonAsync("/Category/Update", category);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction("GetAllCategories");
-                    }
+                    return RedirectToAction("GetAllCategories");
                 }
             }
             return View(category);
@@ -94,33 +91,25 @@ namespace ConsumeWebApiMVC.Controllers
         public async Task<IActionResult> DeleteCategory(int id)
         {
             CategoryViewModel category = null;
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTask = client.GetAsync("/Category/" + id);
+            responseTask.Wait();
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTask = client.GetAsync("/Category/" + id);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<CategoryViewModel>();
-                    readTask.Wait();
-                    category = readTask.Result;
-                }
+                var readTask = result.Content.ReadAsAsync<CategoryViewModel>();
+                readTask.Wait();
+                category = readTask.Result;
             }
             return View(category);
         }
         public async Task<IActionResult> DeleteCategory(CategoryViewModel category)
         {
-
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            HttpResponseMessage response = await client.DeleteAsync("Category/Category/Delete/" + category.Id);
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                HttpResponseMessage response = await client.DeleteAsync("Category/Category/Delete/" + category.Id);
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("GetAllCategories");
-                }
-
+                return RedirectToAction("GetAllCategories");
             }
             return View(category);
         }

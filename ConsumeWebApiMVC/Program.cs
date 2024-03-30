@@ -1,7 +1,11 @@
-var builder = WebApplication.CreateBuilder(args);
 
+var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient("OrderApi", x =>
+{
+    x.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiAddress"));
+});
 
 var app = builder.Build();
 

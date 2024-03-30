@@ -6,27 +6,32 @@ namespace ConsumeWebApiMVC.Controllers
 {
     public class OrderController : Controller
     {
+        private ILogger<OrderController> _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public OrderController(ILogger<OrderController> logger, IHttpClientFactory httpClientFactory)
+        {
+            _logger = logger;
+            _httpClientFactory = httpClientFactory;
+        }
         public IActionResult GetAllOrders()
         {
             IEnumerable<OrderViewModel> orders = null;
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTask = client.GetAsync("/Order/List/");
+            responseTask.Wait();
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTask = client.GetAsync("/Order/List/");
-                responseTask.Wait();
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<List<OrderViewModel>>();
-                    readTask.Wait();
-                    orders = readTask.Result;
-                }
-                else
-                {
-                    //Error response received   
-                    orders = Enumerable.Empty<OrderViewModel>();
-                    ModelState.AddModelError(string.Empty, "Server error try after some time.");
-                }
+                var readTask = result.Content.ReadAsAsync<List<OrderViewModel>>();
+                readTask.Wait();
+                orders = readTask.Result;
+            }
+            else
+            {
+                //Error response received   
+                orders = Enumerable.Empty<OrderViewModel>();
+                ModelState.AddModelError(string.Empty, "Server error try after some time.");
             }
             return View(orders);
         }
@@ -35,21 +40,18 @@ namespace ConsumeWebApiMVC.Controllers
         {
             IEnumerable<EmployeeViewModel> employees = null;
 
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTaskk = client.GetAsync("/Employee/List");
+            responseTaskk.Wait();
+            var resultt = responseTaskk.Result;
+            if (resultt.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTaskk = client.GetAsync("/Employee/List");
-                responseTaskk.Wait();
-                var resultt = responseTaskk.Result;
-                if (resultt.IsSuccessStatusCode)
-                {
-                    var readTask = resultt.Content.ReadAsAsync<IList<EmployeeViewModel>>();
-                    readTask.Wait();
+                var readTask = resultt.Content.ReadAsAsync<IList<EmployeeViewModel>>();
+                readTask.Wait();
 
-                    employees = readTask.Result;
-                    SelectList catItem = new SelectList(employees, "Id", "Name", 1);
-                    ViewBag.catItem = catItem;
-                }
+                employees = readTask.Result;
+                SelectList catItem = new SelectList(employees, "Id", "Name", 1);
+                ViewBag.catItem = catItem;
             }
             return View();
         }
@@ -60,17 +62,13 @@ namespace ConsumeWebApiMVC.Controllers
 
             if (ModelState.IsValid)
             {
-
-                using (var client = new HttpClient())
+                var client = _httpClientFactory.CreateClient("OrderApi");
+                var responseTask = client.PostAsJsonAsync("/Order/Add/", order);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
                 {
-                    client.BaseAddress = new Uri("https://localhost:7140/api/");
-                    var responseTask = client.PostAsJsonAsync("/Order/Add/", order);
-                    responseTask.Wait();
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction("GetAllOrders");
-                    }
+                    return RedirectToAction("GetAllOrders");
                 }
             }
             return View(order);
@@ -81,38 +79,35 @@ namespace ConsumeWebApiMVC.Controllers
         {
             OrderViewModel order = null;
             IEnumerable<EmployeeViewModel> employees = null;
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTask = client.GetAsync("/Order/" + id);
+            responseTask.Wait();
+            var result = responseTask.Result;
+            // Employee
+            var responseTaskk = client.GetAsync("/Employee/List");
+            responseTaskk.Wait();
+
+            var resultt = responseTaskk.Result;
+
+            //If success received   
+            if (result.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTask = client.GetAsync("/Order/" + id);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                // Employee
-                var responseTaskk = client.GetAsync("/Employee/List");
-                responseTaskk.Wait();
+                var readTask = result.Content.ReadAsAsync<OrderViewModel>();
+                readTask.Wait();
 
-                var resultt = responseTaskk.Result;
-
-                //If success received   
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<OrderViewModel>();
-                    readTask.Wait();
-
-                    order = readTask.Result;
-                    /// Employee
-                    /// 
-                    var readTask2 = resultt.Content.ReadAsAsync<IList<EmployeeViewModel>>();
-                    readTask2.Wait();
-                    employees = readTask2.Result;
-                    SelectList catItem = new SelectList(employees, "Id", "Name", order.EmployeeId);
-                    ViewBag.catItem = catItem;
-                }
-                else
-                {
-                    //Error response received   
-                    ModelState.AddModelError(string.Empty, "Server error try after some time.");
-                }
+                order = readTask.Result;
+                /// Employee
+                /// 
+                var readTask2 = resultt.Content.ReadAsAsync<IList<EmployeeViewModel>>();
+                readTask2.Wait();
+                employees = readTask2.Result;
+                SelectList catItem = new SelectList(employees, "Id", "Name", order.EmployeeId);
+                ViewBag.catItem = catItem;
+            }
+            else
+            {
+                //Error response received   
+                ModelState.AddModelError(string.Empty, "Server error try after some time.");
             }
             return View(order);
         }
@@ -121,14 +116,11 @@ namespace ConsumeWebApiMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var client = new HttpClient())
+                var client = _httpClientFactory.CreateClient("OrderApi");
+                HttpResponseMessage response = await client.PutAsJsonAsync("/Order/Update", order);
+                if (response.IsSuccessStatusCode)
                 {
-                    client.BaseAddress = new Uri("https://localhost:7140/api/");
-                    HttpResponseMessage response = await client.PutAsJsonAsync("/Order/Update", order);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction("GetAllOrders");
-                    }
+                    return RedirectToAction("GetAllOrders");
                 }
             }
             return View(order);
@@ -137,38 +129,32 @@ namespace ConsumeWebApiMVC.Controllers
         public async Task<ActionResult> DeleteOrder(int id)
         {
             OrderViewModel order = null;
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTask = client.GetAsync("/Order/" + id);
+            responseTask.Wait();
+            var result = responseTask.Result;
+            //If success received   
+            if (result.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTask = client.GetAsync("/Order/" + id);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                //If success received   
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<OrderViewModel>();
-                    readTask.Wait();
+                var readTask = result.Content.ReadAsAsync<OrderViewModel>();
+                readTask.Wait();
 
-                    order = readTask.Result;
-                }
-                else
-                {
-                    //Error response received   
-                    ModelState.AddModelError(string.Empty, "Server error try after some time.");
-                }
+                order = readTask.Result;
+            }
+            else
+            {
+                //Error response received   
+                ModelState.AddModelError(string.Empty, "Server error try after some time.");
             }
             return View(order);
         }
         public async Task<IActionResult> DeleteOrder(OrderViewModel order)
         {
-            using (var client = new HttpClient())
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            HttpResponseMessage response = await client.DeleteAsync("/Order/Delete/" + order.Id);
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                HttpResponseMessage response = await client.DeleteAsync("/Order/Delete/" + order.Id);
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("GetAllOrders");
-                }
+                return RedirectToAction("GetAllOrders");
             }
             return View();
         }
@@ -180,30 +166,27 @@ namespace ConsumeWebApiMVC.Controllers
         public async Task<ActionResult> Search(int? id)
         {
             OrderViewModel order = null;
-            using (var client = new HttpClient())
+            id = Int32.Parse(HttpContext.Request.Form["code"].ToString());
+            var client = _httpClientFactory.CreateClient("OrderApi");
+            var responseTask = client.GetAsync("/Order/Search/" + id);
+            responseTask.Wait();
+            var result = responseTask.Result;
+            //If success received   
+            if (result.IsSuccessStatusCode)
             {
-                id = Int32.Parse(HttpContext.Request.Form["code"].ToString());
-                client.BaseAddress = new Uri("https://localhost:7140/api/");
-                var responseTask = client.GetAsync("/Order/Search/" + id);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                //If success received   
-                if (result.IsSuccessStatusCode)
+                var readTask = result.Content.ReadAsAsync<OrderViewModel>();
+                readTask.Wait();
+                order = readTask.Result;
+                ViewBag.Message = order;
+                if (order != null)
                 {
-                    var readTask = result.Content.ReadAsAsync<OrderViewModel>();
-                    readTask.Wait();
-                    order = readTask.Result;
-                    ViewBag.Message = order;
-                    if (order != null)
-                    {
 
-                    }
                 }
-                else
-                {
-                    //Error response received   
-                    ModelState.AddModelError(string.Empty, "Server error try after some time.");
-                }
+            }
+            else
+            {
+                //Error response received   
+                ModelState.AddModelError(string.Empty, "Server error try after some time.");
             }
             return View(order);
         }
